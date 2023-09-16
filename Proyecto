@@ -1,0 +1,272 @@
+
+package proyecto;
+
+public class Proyecto {
+
+  
+ 
+    // Congruencia de zellerGregoriano
+    public static int zellerGregoriano(int año, int mes) { // Gregoriano
+        int a = (14 - mes) / 12;
+        int y = año - a;
+        int m = mes + 12 * a - 2;
+        int dia = 1;
+        int h = 0;
+        h = (dia + y + y / 4 - y / 100 + y / 400 + (31 * m) / 12) % 7;
+
+        return h;
+        /**********************************
+         ** Retorna el día de la semana. **
+         * (0 = sábado, 1 = domingo, 2 = lunes, 3 = martes,
+         * 4 = miércoles, 5 = jueves, 6 = viernes).
+         */
+    }
+
+    public static int zellerJuliano(int año, int mes) { // Juliano
+        int a = (14 - mes) / 12;
+        int y = año + 4800 - a;
+        int m = mes + 12 * a - 3;
+        int dia = 1;
+        int K = y % 100; // Obtener el año del siglo
+        int J = y / 100; // Obtener el siglo
+        int h = (dia + ((13 * (m + 1)) / 5) + K + (K / 4) + (J / 4) - (2 * J)) % 7;
+
+        // El rango tiene que estar entre 0 y 7 porque a veces devuelve valores
+        // negativos.
+        if (h < 0) {
+            h = h + 7;
+        }
+
+        return h;
+    }
+
+    public static int Bisiesto(int año) { // Metodo Bisiesto----------------------
+        if (año % 100 == 0) {
+            if (año % 400 == 0)
+                return 1;
+            else
+                return 0;
+        } // Fin del if 100
+        else if (año % 4 == 0)
+            return 1;
+        else
+            return 0;
+    }// Fin del metodo bisiesto ------------------------------------------------
+
+    public static int Dia_Inicio_Año(int año) { // ---------------------------------
+        int dsia = 0;
+        // Previamente teniamos:
+        /*
+         * 0 = Domingo | 1 = Lunes | 2 = Martes | 3 = Miercoles | 4 = Jueves |
+         * 5 = Viernes | 6 = Sabado
+         * 
+         * Esto era lo que teniamos antes.
+         * if (año == 2001)
+         * dsia = 1;// 1 = Lunes
+         * if (año == 2002)
+         * dsia = 2;// 2 = Martes
+         * if (año == 2003)
+         * dsia = 3;// 3 = Miercoles
+         * if (año == 2004)
+         * dsia = 4;// 4 = Jueves
+         * if (año == 2005)
+         * dsia = 6;// 6 = Sabado
+         * if (año == 2006)
+         */
+        return dsia;
+    }// Fin del metodo Dia_Inicio_Año --------------------------------------------
+
+    public static void Imprime_Mes(int mes, int año) {
+
+        int dia = 0;
+        int dsim = 2; // Total de dia inical del mes
+        // int dsia = Dia_Inicio_Año(año); // Dia inicial del año
+        int dsia = zellerGregoriano(año, 1);
+        int cim[] = { 0, 0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5 }; // codigo inicio de mes
+        int tdm[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }; // Total de dia del mes.
+        String nomMes[] = { "yy", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto",
+                "Septiembre", "Octubre", "Noviembre", "Diciembre" };
+        tdm[2] = 28 + Bisiesto(año);
+        dsim = dsia + cim[mes];
+        if (mes >= 3)
+            dsim = dsim + Bisiesto(año);
+        System.out.println(nomMes[mes] + "\t" + año);
+        System.out.println("--------------------");
+        System.out.println(
+                "DO" + "\t" + "LU" + "\t" + "MA" + "\t" + "MI" + "\t" + "JU" + "\t" + "VI" + "\t" + "SA" + "\t");
+        System.out.println("...................................................");
+        for (int c = 1; c <= 42; c++) {
+            if (c > dsim && dia < tdm[mes]) {
+                dia = dia + 1;
+                // int h = zellerGregoriano(año, mes) //zellerGregoriano
+                System.out.print(dia + "\t");
+            } // Fin del if c
+            else
+                System.out.print("" + "\t");
+
+            if (c % 7 == 0)
+                System.out.println("");
+
+        } // Fin del for c
+
+    }// Fin del metodo Imprime_Mes
+
+    public static void InicioGregoriano(int mes, int año) {
+        int dia = 14; // !!Cambiamos dia porque el gregoriano empieza el viernes 15.
+        int dsim = 2; // Total de dia inical del mes
+        // int dsia = Dia_Inicio_Año(año); // Dia inicial del año
+        int dsia = zellerGregoriano(año, 1);
+        int cim[] = { 0, 0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5 }; // codigo inicio de mes
+        int tdm[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }; // Total de dia del mes.
+        String nomMes[] = { "yy", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto",
+                "Septiembre", "Octubre", "Noviembre", "Diciembre" };
+        tdm[2] = 28 + Bisiesto(año);
+        dsim = dsia + cim[mes];
+        if (mes >= 3)
+            dsim = dsim + Bisiesto(año);
+        System.out.println(nomMes[mes] + "\t" + año);
+        System.out.println("--------------------");
+        System.out.println(
+                "DO" + "\t" + "LU" + "\t" + "MA" + "\t" + "MI" + "\t" + "JU" + "\t" + "VI" + "\t" + "SA" + "\t");
+        System.out.println("...................................................");
+        for (int c = 1; c <= 42; c++) {
+            if (c > dsim && dia < tdm[mes]) {
+                dia = dia + 1;
+                // int h = zellerGregoriano(año, mes) //zellerGregoriano
+                System.out.print(dia + "\t");
+            } // Fin del if c
+            else
+                System.out.print("" + "\t");
+
+            if (c % 7 == 0)
+                System.out.println("");
+
+        } // Fin del for c
+
+    }
+
+    public static void Imprime_Juliano(int mes, int año) {
+
+        int dia = 0;
+        int dsim = 2; // Total de dia inical del mes
+        // int dsia = Dia_Inicio_Año(año); // Dia inicial del año
+        int dsia = zellerJuliano(año, 1);
+        int cim[] = { 0, 0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5 }; // codigo inicio de mes
+        int tdm[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }; // Total de dia del mes.
+        String nomMes[] = { "yy", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto",
+                "Septiembre", "Octubre", "Noviembre", "Diciembre" };
+        tdm[2] = 28 + Bisiesto(año);
+        dsim = dsia + cim[mes];
+        if (mes >= 3)
+            dsim = dsim + Bisiesto(año);
+        System.out.println(nomMes[mes] + "\t" + año);
+        System.out.println("--------------------");
+        System.out.println(
+                "DO" + "\t" + "LU" + "\t" + "MA" + "\t" + "MI" + "\t" + "JU" + "\t" + "VI" + "\t" + "SA" + "\t");
+        System.out.println("...................................................");
+        for (int c = 1; c <= 42; c++) {
+            if (c > dsim && dia < tdm[mes]) {
+                dia = dia + 1;
+
+                System.out.print(dia + "\t");
+            } // Fin del if c
+            else
+                System.out.print("" + "\t");
+
+            if (c % 7 == 0)
+                System.out.println("");
+
+        } // Fin del for c
+
+    }// Fin del metodo Imprime_Juliano
+
+    public static void Fin_Juliano(int mes, int año) {
+
+        int dia = 0;
+        int dsim = 2; // Total de dia inical del mes
+        // int dsia = Dia_Inicio_Año(año); // Dia inicial del año
+        int dsia = zellerGregoriano(año, 1);
+        int cim[] = { 0, 0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5 }; // codigo inicio de mes
+        int tdm[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 4, 30, 31 }; // Importante: Cambie TDM a 4 porque quiero
+                                                                          // fin del juliano es el 4.
+        String nomMes[] = { "yy", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto",
+                "Septiembre", "Octubre", "Noviembre", "Diciembre" };
+        tdm[2] = 28 + Bisiesto(año);
+        dsim = dsia + cim[mes];
+        if (mes >= 3)
+            dsim = dsim + Bisiesto(año);
+        System.out.println(nomMes[mes] + "\t" + año);
+        System.out.println("--------------------");
+        System.out.println(
+                "DO" + "\t" + "LU" + "\t" + "MA" + "\t" + "MI" + "\t" + "JU" + "\t" + "VI" + "\t" + "SA" + "\t");
+        System.out.println("...................................................");
+        for (int c = 1; c <= 42; c++) {
+            if (c > dsim && dia < tdm[mes]) {
+                dia = dia + 1;
+                // int h = zellerGregoriano(año, mes) //zellerGregoriano
+                System.out.print(dia + "\t");
+            } // Fin del if c
+            else
+                System.out.print("" + "\t");
+
+            if (c % 7 == 0)
+                System.out.println("");
+
+        } // Fin del for c
+
+    }// Fin del metodo Fin_Juliano
+
+    public static void main(String[] args) {
+
+        // Tabla de Excell Julianos. Para verificar Formula de Zeller en Julianos
+        // for (int k = 1; k <=20; k++){
+        //
+        // System.out.println("Año "+k+" | "+zellerJuliano(k, 1));
+        // System.out.println("\n");
+        //
+        // }
+
+        // ****************Calendario
+        // Juliano***********************************************************
+        for (int k = 1; k <= 1581; k++) { // Queremos imprimir desde 1 hasta 1581 que dejo de usarse el Juliano.
+
+            for (int mes = 1; mes <= 12; mes++) {
+                Imprime_Juliano(mes, k);
+
+            }
+        }
+
+        for (int mes = 1; mes <= 9; mes++) {
+            Imprime_Juliano(mes, 1582);
+
+        }
+        Fin_Juliano(10, 1582); // Solo el mes de Octubre, Oct4
+
+        // ****************Calendario
+        // Gregoriano***********************************************************
+        for (int k = 1; k <= 1582; k++) { // Queremos imprimir desde 1582 porque esa fecha se implemento el
+                                          // calendario gregoriano.
+            for (int mes = 1; mes <= 12; mes++) {
+                Imprime_Juliano(mes, k);
+
+            }
+        }
+
+        System.out.println("Zeller: " + zellerGregoriano(1582, 1));
+        InicioGregoriano(10, 1582); // Solo el mes de Octubre, Viernes 15
+
+        for (int mes = 11; mes <= 12; mes++) { // Solo el mes de Noviembre hasta Diciembre
+            Imprime_Mes(mes, 1582);
+
+        }
+
+        for (int k = 1583; k <= 2099; k++) { // Queremos imprimir desde 1582 porque esa fecha se implemento el
+                                             // calendario gregoriano.
+            for (int mes = 1; mes <= 12; mes++) {
+                Imprime_Mes(mes, k);
+
+            }
+        }
+
+    }// fin del metodo main
+}// fin de la clase main
