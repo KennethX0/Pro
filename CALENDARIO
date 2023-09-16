@@ -1,0 +1,734 @@
+
+package lab22;
+import java.util.Scanner;
+
+import javax.sound.midi.Soundbank;
+
+
+public class Lab22 {
+
+    // ZellerGregoriano
+    public static int zellerGregoriano(int año, int mes) { // Gregoriano
+        int a = (14 - mes) / 12;
+        int y = año - a;
+        int m = mes + 12 * a - 2;
+        int dia = 1; // primer dia de la semana
+        int h = 0;
+        h = (dia + y + y / 4 - y / 100 + y / 400 + (31 * m) / 12) % 7;
+
+        return h;/**********************************
+ * Devuelve el día de la semana. * dsia, mes,
+ * (0 = sábado, 1 = domingo, 2 = lunes, 3 = martes,
+ * 4 = miércoles, 5 = jueves, 6 = viernes).
+ */
+    }
+
+    //  ZellerJuliano
+    public static int zellerJuliano(int año, int mes) { // Juliano
+        int a = (14 - mes) / 12;
+        int y = año + 4800 - a;
+        int m = mes + 12 * a - 3;
+        int dia = 1; // // Queremos buscar dsia (el primer dia de la semana)
+        int K = y % 100; // Obtener el año del siglo
+        int J = y / 100; // Obtener el siglo
+        // int h;
+        int h;
+        h = (dia + ((13 * (m + 1)) / 5) + K + (K / 4) + (J / 4) - (2 * J)) % 7;
+        // h = (dia + y + y / 4 - y / 100 + y / 400 + (31 * m) / 12) % 7;
+
+        // El rango tiene que estar entre 0 y 7 porque a veces devuelve valores
+        // negativos.
+        if (h < 0) {
+            h = h + 7;
+        }
+
+        return h;
+    }
+
+    // Congruencia de Zeller pero con 3 variables para la opcion 3 del menu.
+    public static int BuscadorGregoriano(int año, int mes, int dia) { // Gregoriano
+        int a = (14 - mes) / 12;
+        int y = año - a;
+        int m = mes + 12 * a - 2;
+        int h = 0;
+        h = (dia + y + y / 4 - y / 100 + y / 400 + (31 * m) / 12) % 7;
+
+        return h;/**********************************
+                  * Retorna el día de la semana. *
+                  * (0 = sábado, 1 = domingo, 2 = lunes, 3 = martes,
+                  * 4 = miércoles, 5 = jueves, 6 = viernes).
+                  */
+    }
+
+    // Congruencia de Zeller pero con 3 variables para la opcion 3 del menu.
+    public static int BuscadorJuliano(int año, int mes, int dia) { // Juliano
+        int a = (14 - mes) / 12;
+        int y = año + 4800 - a;
+        int m = mes + 12 * a - 3;
+        int K = y % 100; // Obtener el año del siglo
+        int J = y / 100; // Obtener el siglo
+        int h = (dia + ((13 * (m + 1)) / 5) + K + (K / 4) + (J / 4) - (2 * J)) % 7;
+
+        // El rango tiene que estar entre 0 y 7 porque a veces devuelve valores
+        // negativos.
+        if (h < 0) {
+            h = h + 7;
+        }
+
+        return h;
+    }
+
+    public static int Bisiesto(int año) { // Metodo Bisiesto----------------------
+        if (año % 100 == 0) {
+            if (año % 400 == 0)
+                return 1;
+            else
+                return 0;
+        } // Fin del if 100
+        else if (año % 4 == 0)
+            return 1;
+        else
+            return 0;
+    }// Fin del metodo bisiesto ------------------------------------------------
+
+    public static int Dia_Inicio_Año(int año) { // ---------------------------------
+        int dsia = 0;
+      /*
+ * 0 = Día 0 | 1 = Día 1 | 2 = Día 2 | 3 = Día 3 | 4 = Día 4 |
+ * 5 = Día 5 | 6 = Día 6
+ * 
+ * Esta información se utilizó previamente.
+ * if (año == 2001)
+ * dsia = 1; // Día 1 (Lunes)
+ * if (año == 2002)
+ * dsia = 2; // Día 2 (Martes)
+ * if (año == 2003)
+ * dsia = 3; // Día 3 (Miércoles)
+ * if (año == 2004)
+ * dsia = 4; // Día 4 (Jueves)
+ * if (año == 2005)
+ * dsia = 6; // Día 6 (Sábado)
+ * if (año == 2006)
+ */
+        return dsia;
+    }// Fin del metodo Dia_Inicio_Año --------------------------------------------
+
+    public static void Imprime_Mes(int mes, int año) {
+
+        int dia = 0;
+        int dsim = 2; // Total de dia inical del mes
+        // int dsia = Dia_Inicio_Año(año); // Dia inicial del año
+        int dsia = zellerGregoriano(año, 1);
+        int cim[] = { 0, 0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5 }; // codigo inicio de mes
+        int tdm[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }; // Total de dia del mes.
+        String nomMes[] = { "yy", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto",
+                "Septiembre", "Octubre", "Noviembre", "Diciembre" };
+        tdm[2] = 28 + Bisiesto(año);
+        dsim = dsia + cim[mes];
+        if (mes >= 3)
+            dsim = dsim + Bisiesto(año);
+        System.out.println(nomMes[mes] + "\t" + año);
+        System.out.println("--------------------");
+        System.out.println(
+                "DO" + "\t" + "LU" + "\t" + "MA" + "\t" + "MI" + "\t" + "JU" + "\t" + "VI" + "\t" + "SA" + "\t");
+        System.out.println("...................................................");
+        for (int c = 1; c <= 42; c++) {
+            if (c > dsim && dia < tdm[mes]) {
+                dia = dia + 1;
+                // int h = zellerGregoriano(año, mes) //zellerGregoriano
+                System.out.print(dia + "\t");
+            } // Fin del if c
+            else
+                System.out.print("" + "\t");
+
+            if (c % 7 == 0)
+                System.out.println("");
+
+        } // Fin del for c
+
+    }// Fin del metodo Imprime_Mes
+
+    public static void InicioGregoriano(int mes, int año) {
+        int dia = 14; // !!Cambiamos dia porque el gregoriano empieza el viernes 15.
+        int dsim = 2; // Total de dia inical del mes
+        // int dsia = Dia_Inicio_Año(año); // Dia inicial del año
+        int dsia = zellerGregoriano(año, 1);
+        int cim[] = { 0, 0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5 }; // codigo inicio de mes
+        int tdm[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }; // Total de dia del mes.
+        String nomMes[] = { "yy", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto",
+                "Septiembre", "Octubre", "Noviembre", "Diciembre" };
+        tdm[2] = 28 + Bisiesto(año);
+        dsim = dsia + cim[mes];
+        if (mes >= 3)
+            dsim = dsim + Bisiesto(año);
+        System.out.println(nomMes[mes] + "\t" + año);
+        System.out.println("--------------------");
+        System.out.println(
+                "DO" + "\t" + "LU" + "\t" + "MA" + "\t" + "MI" + "\t" + "JU" + "\t" + "VI" + "\t" + "SA" + "\t");
+        System.out.println("...................................................");
+        for (int c = 1; c <= 42; c++) {
+            if (c > dsim && dia < tdm[mes]) {
+                dia = dia + 1;
+                // int h = zellerGregoriano(año, mes) //zellerGregoriano
+                System.out.print(dia + "\t");
+            } // Fin del if c
+            else
+                System.out.print("" + "\t");
+
+            if (c % 7 == 0)
+                System.out.println("");
+
+        } // Fin del for c
+
+    }
+
+    public static void Imprime_Juliano(int mes, int año) {
+
+        int dia = 0;
+        int dsim = 2; // Total de dia inical del mes
+        // int dsia = Dia_Inicio_Año(año); // Dia inicial del año
+        int dsia = zellerJuliano(año, 1);
+        int cim[] = { 0, 0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5 }; // codigo inicio de mes
+        int tdm[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }; // Total de dia del mes.
+        String nomMes[] = { "yy", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto",
+                "Septiembre", "Octubre", "Noviembre", "Diciembre" };
+        tdm[2] = 28 + Bisiesto(año);
+        dsim = dsia + cim[mes];
+        if (mes >= 3)
+            dsim = dsim + Bisiesto(año);
+        System.out.println(nomMes[mes] + "\t" + año);
+        System.out.println("--------------------");
+        System.out.println(
+                "DO" + "\t" + "LU" + "\t" + "MA" + "\t" + "MI" + "\t" + "JU" + "\t" + "VI" + "\t" + "SA" + "\t");
+       System.out.println("...................................................");
+        for (int c = 1; c <= 42; c++) {
+            if (c > dsim && dia < tdm[mes]) {
+                dia = dia + 1;
+
+                System.out.print(dia + "\t");
+            } // Fin del if c
+            else
+                System.out.print("" + "\t");
+
+            if (c % 7 == 0)
+                System.out.println("");
+
+        } // Fin del for c
+
+    }// Fin del metodo Imprime_Juliano
+
+    public static void Fin_Juliano(int mes, int año) {
+
+        int dia = 0;
+        int dsim = 2; // Total de dia inical del mes
+        // int dsia = Dia_Inicio_Año(año); // Dia inicial del año
+        int dsia = zellerGregoriano(año, 1);
+        int cim[] = { 0, 0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5 }; // codigo inicio de mes
+        int tdm[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 4, 30, 31 }; // Importante: Cambie TDM a 4 porque quiero
+                                                                          // fin del juliano es el 4. (Octubre)
+        String nomMes[] = { "yy", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto",
+                "Septiembre", "Octubre", "Noviembre", "Diciembre" };
+        tdm[2] = 28 + Bisiesto(año);
+        dsim = dsia + cim[mes];
+        if (mes >= 3)
+            dsim = dsim + Bisiesto(año);
+        System.out.println(nomMes[mes] + "\t" + año);
+        System.out.println("--------------------");
+        System.out.println(
+                "DO" + "\t" + "LU" + "\t" + "MA" + "\t" + "MI" + "\t" + "JU" + "\t" + "VI" + "\t" + "SA" + "\t");
+        System.out.println("...................................................");
+        for (int c = 1; c <= 42; c++) {
+            if (c > dsim && dia < tdm[mes]) {
+                dia = dia + 1;
+                // int h = zellerGregoriano(año, mes) //zellerGregoriano
+                System.out.print(dia + "\t");
+            } // Fin del if c
+            else
+                System.out.print("" + "\t");
+
+            if (c % 7 == 0)
+                System.out.println("");
+
+        } // Fin del for c
+
+    }// Fin del metodo Fin_Juliano
+
+    public static void OpcionesMenu() {
+System.out.println("\t"+"\t"+"   Menu");
+        System.out.println("---------------------------------------------");
+System.out.println("Seleccione una opcion:");
+        System.out.println("");
+System.out.println("1- Calendario del mes.");
+System.out.println("2- Calendario del ano.");
+System.out.println("3- Dia de la semana de una fecha.");
+System.out.println("4- Numero de Anos, meses y dias entre dos fechas.");
+System.out.println("5- Numero de dias entre dos fechas.");
+System.out.println("6- Salir.");
+    }
+
+    public static void DiasSemana(int dsia) {
+       /*
+// * Esta función se encuentra en el menú, específicamente en la opción 3.
+// * Su propósito es recibir la variable dsia y determinar el día de la semana correspondiente.
+// * Es importante recordar que dsia se calcula a partir de la fórmula de Zeller, la cual se aplica
+// * a un calendario juliano o gregoriano, dependiendo de la situación.
+// *
+// * Una vez que se realiza la comparación y cálculo necesario, esta función devuelve como resultado
+// * el día de la semana correspondiente.
+// */
+      String Dia_Semana;
+if (dsia == 0) {
+    Dia_Semana = "Domingo\nUn día perfecto para descansar y recargar energías.";
+} else if (dsia == 1) {
+    Dia_Semana = "Lunes\nComienza la semana con determinación y un plan.";
+} else if (dsia == 2) {
+    Dia_Semana = "Martes\nAprovecha las oportunidades que se presenten en tu camino.";
+} else if (dsia == 3) {
+    Dia_Semana = "Miércoles\nMantén la calma, estás a mitad de semana.";
+} else if (dsia == 4) {
+    Dia_Semana = "Jueves\nNo te rindas, el fin de semana está cerca.";
+} else if (dsia == 5) {
+    Dia_Semana = "Viernes\n¡Hoy es viernes y el cuerpo lo sabe! Disfruta al máximo.";
+} else {
+    Dia_Semana = "Sábado\nDedica tiempo a hacer lo que te hace feliz y recarga energías.";
+}
+System.out.println("El día de la semana es: " + Dia_Semana);
+    }// Fin de funcion DiasSemana
+
+    public static void main(String[] args) {
+
+        
+
+        // ***********************Menu**************************************** */
+        int Total_Dias;
+        Total_Dias = 0;
+        int tdm[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+        int bisiestos;
+        bisiestos = 0;
+        String console;
+        console = "\t~ $ sudo apt get ";
+        int i = 1;
+        int menu;
+        Scanner input = new Scanner(System.in);
+        int Mes_Ingresado, Año_Ingresado, Dia_Ingresado;
+        int Mes_IngresadoB, Año_IngresadoB, Dia_IngresadoB;
+        int Mes_IngresadoC, Año_IngresadoC, Dia_IngresadoC;
+        Año_Ingresado = 0;
+        Mes_Ingresado = 0;
+        Dia_Ingresado = 0;
+        Mes_IngresadoB = 0;
+        Año_IngresadoB = 0;
+        Dia_IngresadoB = 0;
+        Año_IngresadoC = 0;
+        Mes_IngresadoC = 0;
+        Dia_IngresadoC = 0;
+        Boolean Gregoriano; // Usada en la opcion 3. Para saber si es calendario gregoriano o no.
+        Gregoriano = null; // Inicializando la variable sin valor alguno.
+        int dsia; // dia en que inicia el empieza el año. Tambien la uso para los meses.
+        dsia = 0;
+        String Dia_Semana;
+        Dia_Semana = "";
+        int j = 1;
+        while (i < 2) {
+            OpcionesMenu();
+            menu = input.nextInt();
+
+            if (menu == 1) {// ----------------------BOTON 1-------------------
+                System.out.println(console + "1. Calendario del mes seleccionado.");
+
+                j = 1;
+                while (j < 2) {// Meses entre 1 a 12 solamente.
+                    System.out.println("Que mes quiere imprimir? \nSeleccione un numero del 1 - 12");
+                    Mes_Ingresado = input.nextInt();
+                    if (Mes_Ingresado >= 1 && Mes_Ingresado <= 12) {
+                        j = j + 1;
+                    } else {
+                        j = 1;
+                    }
+                }
+
+                j = 1;
+                while (j < 2) {// Años entre 1 a 2099 solamente.
+                    System.out.println("\nQue año quiere imprimir?\nRango entre: 1 - 2099.");
+                    Año_Ingresado = input.nextInt();
+                    if (Año_Ingresado >= 1 && Año_Ingresado <= 2099) {
+                        j = j + 1;
+                    } else {
+                        j = 1;
+                    }
+                }
+
+                if (Año_Ingresado < 1582) {
+                    System.out.println("Calendario Juliano");
+                    Imprime_Juliano(Mes_Ingresado, Año_Ingresado);
+                } else if (Año_Ingresado > 1583) {
+                    System.out.println("Calendario Gregoriano");
+                    Imprime_Mes(Mes_Ingresado, Año_Ingresado);
+                } else if (Año_Ingresado == 1583 && Mes_Ingresado <= 9) {
+                    System.out.println("Calendario Juliano");
+                    Imprime_Juliano(Mes_Ingresado, Año_Ingresado);
+                } else if (Año_Ingresado == 1583 && Mes_Ingresado == 10) {
+                    System.out.println("**** Calendario Mixto **");
+                    System.out.println("El 4 de Octubre se dejo de utilizar el Calendario Juliano y\n");
+                    System.out.println("El 15 de Octubre de 1583 se empezo a utilizar el Calendario Gregoriano.");
+                    System.out.println("Aqui esta el calendario Gregoriano de esa fecha:\n");
+                    System.out.println("----------------------------");
+                    Imprime_Mes(Mes_Ingresado, Año_Ingresado);
+                } else if (Año_Ingresado == 1583 && Mes_Ingresado == 11) {
+                    System.out.println("Calendario Gregoriano");
+                    Imprime_Mes(Mes_Ingresado, Año_Ingresado);
+                }
+
+                else if (Año_Ingresado == 1583 && Mes_Ingresado == 12) {
+                    System.out.println("Calendario Gregoriano");
+                    Imprime_Mes(Mes_Ingresado, Año_Ingresado);
+                }
+
+            } else if (menu == 2) {// ----------------------Opcion2-------------------
+                System.out.println("2. Calendario del año seleccionado.");
+
+                j = 1;
+                while (j < 2) {// Años entre 1 a 2099 solamente.
+                    System.out.println("\nQue año quiere imprimir?\nRango entre: 1 - 2099.");
+                    Año_Ingresado = input.nextInt();
+                    if (Año_Ingresado >= 1 && Año_Ingresado <= 2099) {
+                        j = j + 1;
+                    } else {
+                        j = 1;
+                    }
+                }
+
+                if (Año_Ingresado < 1582) {
+                    System.out.println("Calendario Juliano");
+                    for (int mes = 1; mes <= 12; mes++) {
+                        Imprime_Juliano(mes, Año_Ingresado);
+                    }
+
+                } else if (Año_Ingresado >= 1583) {
+                    System.out.println("Calendario Gregoriano");
+                    for (int mes = 1; mes <= 12; mes++) {
+                        Imprime_Mes(mes, Año_Ingresado);
+                    }
+
+                }
+            } else if (menu == 3) {// ----------------------Opcion3-------------------
+                System.out.println(console + "3. Día de la semana de una fecha seleccionado.");
+
+                j = 1;
+
+                while (j < 2) {// Dentro del rango de 1 - 2099
+                    System.out.println("\nQue año quiere imprimir?\nRango entre: 1 - 2099.");
+                    Año_Ingresado = input.nextInt();
+                    if (Año_Ingresado >= 1 && Año_Ingresado <= 2099) {
+
+                        j = j + 1;
+
+                    } else {
+                        System.out.println("Ingrese un año entre 1 - 2099...");
+                        j = 1;
+                    }
+
+                }
+
+                j = 1;
+                while (j < 2) {// Meses entre 1 a 12 solamente.
+                    System.out.println("Que mes quiere imprimir? \nSeleccione un numero del 1 - 12");
+                    Mes_Ingresado = input.nextInt();
+                    if (Mes_Ingresado >= 1 && Mes_Ingresado <= 12) {
+                        j = j + 1;
+                    } else {
+                        j = 1;
+                    }
+                }
+
+                tdm[2] = 28 + Bisiesto(Año_Ingresado);// Limitador de dias bisiestos.
+                j = 1;
+                while (j < 2) {// Limitador entre 31, 30, 29 y 28.
+                    System.out.println("Que dia quiere buscar? \nSeleccione un numero del 1 - " + tdm[Mes_Ingresado]);
+                    Dia_Ingresado = input.nextInt();
+                    if (Dia_Ingresado >= 1 && Dia_Ingresado <= tdm[Mes_Ingresado]) {
+                        j = j + 1;
+                    } else {
+                        j = 1;
+                    }
+                }
+
+                // Determinar si es Gregoriano o Juliano.
+                if (Año_Ingresado <= 1583 && Mes_Ingresado == 10 && Dia_Ingresado <= 4) {
+                    Gregoriano = false;
+                } else {
+                    Gregoriano = true;
+                }
+
+                if (Gregoriano == true) {
+                    System.out.println("***Calendario Gregoriano***");
+                    System.out.println("Dia ingresado:" + Dia_Ingresado);
+                    dsia = BuscadorGregoriano(Año_Ingresado, Mes_Ingresado, Dia_Ingresado);
+                    DiasSemana(dsia);
+                    System.out.println(dsia);
+
+                } else {
+                    System.out.println("***Calendario Juliano***");
+                    System.out.println("Dia ingresado:" + Dia_Ingresado);
+                    dsia = BuscadorJuliano(Año_Ingresado, Mes_Ingresado, Dia_Ingresado);
+                    DiasSemana(dsia);
+                    System.out.println(dsia);
+
+                }
+
+            } else if (menu == 4) {// ----------------------------------------Opcion4
+                System.out.println(console + "4. Número de Años, meses y días entre dos fechas seleccionado.");
+
+                j = 1;
+                while (j < 2) {// Dentro del rango de 1 - 2099
+                    System.out.println("\nPrimero defina el AÑO A\nRango entre: 1 - 2099.");
+                    Año_Ingresado = input.nextInt();
+                    if (Año_Ingresado >= 1 && Año_Ingresado <= 2099) {
+                        j = j + 1;
+                    } else {
+                        System.out.println("Ingrese un año entre 1 - 2099...");
+                        j = 1;
+                    }
+                }
+
+                j = 1;
+                while (j < 2) {// Meses entre 1 a 12 solamente.
+                    System.out.println("Defina el MES A\nSeleccione un numero del 1 - 12");
+                    Mes_Ingresado = input.nextInt();
+                    if (Mes_Ingresado >= 1 && Mes_Ingresado <= 12) {
+                        j = j + 1;
+                    } else {
+                        j = 1;
+                    }
+                }
+
+                tdm[2] = 28 + Bisiesto(Año_Ingresado);// Limitador de dias bisiestos.
+                j = 1;
+                while (j < 2) {// Limitador entre 31, 30, 29 y 28.
+                    System.out.println("Defina el dia A\nSeleccione un numero del 1 - " + tdm[Mes_Ingresado]);
+                    Dia_Ingresado = input.nextInt();
+                    if (Dia_Ingresado >= 1 && Dia_Ingresado <= tdm[Mes_Ingresado]) {
+                        j = j + 1;
+                    } else {
+                        j = 1;
+                    }
+                }
+
+                // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                // Reesablecer TDM a sus valores por defecto, porque se habia manipulado con
+                // Año_Ingresado previamente. Entonces hay que dejarlo con sus valores por def.
+                tdm[1] = 31;
+                tdm[2] = 28;
+                tdm[3] = 31;
+                tdm[4] = 30;
+                tdm[5] = 31;
+                tdm[6] = 30;
+                tdm[7] = 31;
+                tdm[8] = 31;
+                tdm[9] = 30;
+                tdm[10] = 31;
+                tdm[11] = 30;
+                tdm[12] = 31;
+
+                j = 1;
+                while (j < 2) {// Dentro del rango de 1 - 2099
+                    System.out.println("\nPrimero defina el AÑO B\nRango entre: 1 - 2099.");
+                    Año_IngresadoB = input.nextInt();
+                    // Ahora que TDM tiene los valores por defecto lo volvemos a manipular pero con
+                    // el AÑOB como lo hicimos anteriormente.
+                    if (Año_IngresadoB >= 1 && Año_IngresadoB <= 2099) {
+                        j = j + 1;
+                    } else {
+                        System.out.println("Ingrese un año entre 1 - 2099...");
+                        j = 1;
+                    }
+                }
+
+                j = 1;
+                while (j < 2) {// Meses entre 1 a 12 solamente.
+                    System.out.println("Defina el MES B\nSeleccione un numero del 1 - 12");
+                    Mes_IngresadoB = input.nextInt();
+                    if (Mes_IngresadoB >= 1 && Mes_IngresadoB <= 12) {
+                        j = j + 1;
+                    } else {
+                        j = 1;
+                    }
+                }
+
+                tdm[2] = 28 + Bisiesto(Año_IngresadoB);// Limitador de dias bisiestos.
+                j = 1;
+                while (j < 2) {// Limitador entre 31, 30, 29 y 28.
+                    System.out.println("Defina el dia B\nSeleccione un numero del 1 - " + tdm[Mes_IngresadoB]);
+                    Dia_IngresadoB = input.nextInt();
+                    if (Dia_IngresadoB >= 1 && Dia_IngresadoB <= tdm[Mes_IngresadoB]) {
+                        j = j + 1;
+                    } else {
+                        j = 1;
+                    }
+                }
+
+                // ---------------------------------------
+
+                // C = A - B
+                // Calcular los años.
+                Año_IngresadoC = Año_Ingresado - Año_IngresadoB;
+                if (Año_IngresadoC < 1)
+                    Año_IngresadoC = Año_IngresadoC * -1;
+
+                // Calcular los meses.
+                Mes_IngresadoC = Mes_Ingresado - Mes_IngresadoB;
+                if (Mes_IngresadoC < 1)
+                    Mes_IngresadoC = Mes_IngresadoC * -1;
+
+                // Calcular los dias.
+                Dia_IngresadoC = Dia_Ingresado - Dia_IngresadoB;
+                if (Dia_IngresadoC < 1)
+                    Dia_IngresadoC = Dia_IngresadoC * -1;
+
+                // Resultado del menu 4.
+                System.out.println("Número de años, meses y días entre: " + Dia_Ingresado + "/" + Mes_Ingresado + "/"
+                        + Año_Ingresado + " y " + Dia_IngresadoB + "/" + Mes_IngresadoB + "/" + Año_IngresadoB);
+                System.out.println(
+                        "Años(" + Año_IngresadoC + ") , Mes es(" + Mes_IngresadoC + "), Dias(" + Dia_IngresadoC + ").");
+
+                // ***********************************************************
+                // ------------------------------------------------------------------------------------------------
+            } else if (menu == 5) {
+                System.out.println(console + "5. Número de días entre dos fechas seleccionado.");
+
+                j = 1;
+                while (j < 2) {// Dentro del rango de 1 - 2099
+                    System.out.println("\nPrimero defina el AÑO A\nRango entre: 1 - 2099.");
+                    Año_Ingresado = input.nextInt();
+                    if (Año_Ingresado >= 1 && Año_Ingresado <= 2099) {
+                        j = j + 1;
+                    } else {
+                        System.out.println("Ingrese un año entre 1 - 2099...");
+                        j = 1;
+                    }
+                }
+
+                j = 1;
+                while (j < 2) {// Meses entre 1 a 12 solamente.
+                    System.out.println("Defina el MES A\nSeleccione un numero del 1 - 12");
+                    Mes_Ingresado = input.nextInt();
+                    if (Mes_Ingresado >= 1 && Mes_Ingresado <= 12) {
+                        j = j + 1;
+                    } else {
+                        j = 1;
+                    }
+                }
+
+                tdm[2] = 28 + Bisiesto(Año_Ingresado);// Limitador de dias bisiestos.
+                j = 1;
+                while (j < 2) {// Limitador entre 31, 30, 29 y 28.
+                    System.out.println("Defina el dia A\nSeleccione un numero del 1 - " + tdm[Mes_Ingresado]);
+                    Dia_Ingresado = input.nextInt();
+                    if (Dia_Ingresado >= 1 && Dia_Ingresado <= tdm[Mes_Ingresado]) {
+                        j = j + 1;
+                    } else {
+                        j = 1;
+                    }
+                }
+
+                // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                // Reesablecer TDM a sus valores por defecto, porque se habia manipulado con
+                // Año_Ingresado previamente. Entonces hay que dejarlo con sus valores por def.
+                tdm[1] = 31;
+                tdm[2] = 28;
+                tdm[3] = 31;
+                tdm[4] = 30;
+                tdm[5] = 31;
+                tdm[6] = 30;
+                tdm[7] = 31;
+                tdm[8] = 31;
+                tdm[9] = 30;
+                tdm[10] = 31;
+                tdm[11] = 30;
+                tdm[12] = 31;
+
+                j = 1;
+                while (j < 2) {// Dentro del rango de 1 - 2099
+                    System.out.println("\nPrimero defina el AÑO B\nRango entre: 1 - 2099.");
+                    Año_IngresadoB = input.nextInt();
+                    // Ahora que TDM tiene los valores por defecto lo volvemos a manipular pero con
+                    // el AÑOB como lo hicimos anteriormente.
+                    if (Año_IngresadoB >= 1 && Año_IngresadoB <= 2099) {
+                        j = j + 1;
+                    } else {
+                        System.out.println("Ingrese un año entre 1 - 2099...");
+                        j = 1;
+                    }
+                }
+
+                j = 1;
+                while (j < 2) {// Meses entre 1 a 12 solamente.
+                    System.out.println("Defina el MES B\nSeleccione un numero del 1 - 12");
+                    Mes_IngresadoB = input.nextInt();
+                    if (Mes_IngresadoB >= 1 && Mes_IngresadoB <= 12) {
+                        j = j + 1;
+                    } else {
+                        j = 1;
+                    }
+                }
+
+                // -------------Verificar si las cosas son bisiestos.
+
+                tdm[2] = 28 + Bisiesto(Año_IngresadoB);// Limitador de dias bisiestos.
+                j = 1;
+                while (j < 2) {// Limitador entre 31, 30, 29 y 28.
+                    System.out.println("Defina el dia B\nSeleccione un numero del 1 - " + tdm[Mes_IngresadoB]);
+                    Dia_IngresadoB = input.nextInt();
+                    if (Dia_IngresadoB >= 1 && Dia_IngresadoB <= tdm[Mes_IngresadoB]) {
+                        j = j + 1;
+                    } else {
+                        j = 1;
+                    }
+                }
+                // Verificar cuantos añosBisiestos hay en A.
+                
+                for (int k = 1; k <= Año_Ingresado; k++) {
+                    if (Año_Ingresado >= 1583) {
+                        bisiestos = bisiestos + Bisiesto(k);
+                    }
+                }
+
+                // ---------------------------------------
+
+                // C = A - B
+                // Calcular los años.
+                Año_IngresadoC = Año_Ingresado - Año_IngresadoB;
+                if (Año_IngresadoC < 1)
+                    Año_IngresadoC = Año_IngresadoC * -1;
+
+                // Calcular los meses.
+                Mes_IngresadoC = Mes_Ingresado - Mes_IngresadoB;
+                if (Mes_IngresadoC < 1)
+                    Mes_IngresadoC = Mes_IngresadoC * -1;
+
+                // Calcular los dias.
+                Dia_IngresadoC = Dia_Ingresado - Dia_IngresadoB;
+                if (Dia_IngresadoC < 1)
+                    Dia_IngresadoC = Dia_IngresadoC * -1;
+
+                System.out.println("Total de dias bisiestos en los años: " + bisiestos);
+
+                Total_Dias = Año_IngresadoC * 365 + bisiestos;
+                System.out.print("La cantidad de dias entre " + Dia_Ingresado + "/" + Mes_Ingresado + "/"
+                        + Año_Ingresado + " y " + Dia_IngresadoB + "/" + Mes_IngresadoB + "/" + Año_IngresadoB);
+                System.out.println(" es: " + Total_Dias);
+
+                // ***********************************************************
+                // ------------------------------------------------------------------------------------------------
+
+            } else if (menu == 6) {// Salir.
+                i = i + 1;
+            } else {
+                System.out.println("~ $ Error al ingresar un numero!Intente nuevamente.");
+            }
+
+        } // ************Fin del Menu******************
+
+    } // fin del metodo main
+
+}// Fin de la clase main
